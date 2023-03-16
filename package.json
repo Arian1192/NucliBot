@@ -13,8 +13,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/local-auth": "^2.1.0",
     "@slack/bolt": "^3.12.2",
     "dotenv": "^16.0.3",
+    "googleapis": "^105.0.0",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.41",
     "node-fetch": "^3.3.0"
   },
   "devDependencies": {
