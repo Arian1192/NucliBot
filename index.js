@@ -181,7 +181,7 @@ app.command('/available_meetings', async ({
 })
 
 app.action('available_meetings', async ({
-    ack, respond, body, client
+    ack,
 }) => {
     await ack()
     const response = fetch('https://hooks.slack.com/services/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', {
