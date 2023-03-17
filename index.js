@@ -25,6 +25,7 @@ expressApp.listen(PORT, () => {
 // const GOOGLE_CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID
 process.env.GOOGLE_APPLICATION_CREDENTIALS = '/home/arian/Dev/pruebas/Nucli/credentials.json'
 const API_KEY_TIMETIME = process.env.API_KEY_TIMETIME
+const WEBHOOK_URL = process.env.WEEBHOOK_URL
 
 
 const app = new App({
@@ -184,7 +185,7 @@ app.action('available_meetings', async ({
     ack,
 }) => {
     await ack()
-    const response = fetch('https://hooks.slack.com/services/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', {
+    const response = fetch(`${WEBHOOK_URL}`, {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({message: true})
