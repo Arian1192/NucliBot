@@ -1,13 +1,28 @@
 import pkg from '@slack/bolt'
+import express from 'express'
 const { App } = pkg
 import fetch from 'node-fetch'
 import dotenv from 'dotenv'
 import { formatDate } from './utils/dataConverter.js'
 import {getOnlyBookingsAvailable} from "./utils/getOnlyBookingsAvailable.js";
+import bodyParser from "body-parser";
 dotenv.config()
 
+const expressApp = express()
+const PORT = process.env.EXPRESS_PORT || 8080
+expressApp.post('/slack/hourSelected', (req,res) =>{
+    const body = req.body
+    console.log(body)
+    res.status(200).json({message: true})
+})
 
-const GOOGLE_CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID
+expressApp.use(bodyParser.json())
+expressApp.listen(PORT, () => {
+    console.log(`Server express listening on port ${PORT}`)
+})
+
+
+// const GOOGLE_CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID
 process.env.GOOGLE_APPLICATION_CREDENTIALS = '/home/arian/Dev/pruebas/Nucli/credentials.json'
 const API_KEY_TIMETIME = process.env.API_KEY_TIMETIME
 
@@ -128,6 +143,7 @@ app.command('/available_meetings', async ({
                             },
                             accessory: {
                                 type: "static_select",
+                                action_id: "available_meetings",
                                 placeholder: {
                                     type: "plain_text",
                                     text: "Select one",
@@ -164,13 +180,14 @@ app.command('/available_meetings', async ({
     }
 })
 
-app.action('available_meetings_modal', async ({
+app.action('available_meetings', async ({
     ack, respond, body, client
 }) => {
     await ack()
-    await respond({
-        text: "Thanks for your selection",
-        response_type: "in_channel"
+    const response = fetch('https://hooks.slack.com/services/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', {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message: true})
     })
 })
 
